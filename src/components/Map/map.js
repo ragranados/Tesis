@@ -5,11 +5,15 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import Sketch from "@arcgis/core/widgets/Sketch";
 import './map.css';
+import {createSqlQuery} from "../../utils";
 
 const MapComponent = () => {
     const mapRef = useRef();
     let mapView = null;
     let graphicsLayerSketch = null;
+    let layer = new FeatureLayer({
+        url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/cuencas_con_estadistica_y_geometrias_corregidas_area_volumen_calculados/FeatureServer/0"
+    });
 
     useEffect(() => {
         const map = new ArcGIGMap({
@@ -58,20 +62,38 @@ const MapComponent = () => {
     }, [])
 
     const makeSpatialQuery = (geometry) => {
-        const layer = new FeatureLayer({
-            url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/cuencas_2/FeatureServer/0"
-        })
+
         const parcelQuery = {
             spatialRelationship: "intersects", // Relationship operation to apply
             geometry: geometry,  // The sketch feature geometry
-            outFields: ["OBJECTID"], // Attributes to return
+            outFields: ["OBJECTID", "Pfastetter", "volumen_m3"], // Attributes to return
             returnGeometry: true
         };
 
         layer.queryFeatures(parcelQuery)
             .then((results) => {
 
-                displayResult(results)
+                queryTributary(results.features[0].attributes.Pfastetter);
+
+            }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const queryTributary = (results) => {
+
+        const parcelQuery = {
+            where: createSqlQuery(results),  // Set by select element
+            spatialRelationship: "intersects", // Relationship operation to apply
+            geometry: mapView.extent, // Restricted to visible extent of the map
+            outFields: ["OBJECTID", "Pfastetter", "volumen_m3"], // Attributes to return
+            returnGeometry: true
+        };
+
+        layer.queryFeatures(parcelQuery)
+            .then((resultsTributary) => {
+
+                displayResult(resultsTributary);
 
             }).catch((error) => {
             console.log(error);
