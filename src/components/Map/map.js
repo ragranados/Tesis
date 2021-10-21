@@ -5,7 +5,7 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import Sketch from "@arcgis/core/widgets/Sketch";
 import './map.css';
-import {createSqlQuery} from "../../utils";
+import {createSqlQuery, getLastYearInfo} from "../../utils";
 
 const MapComponent = () => {
     const mapRef = useRef();
@@ -13,6 +13,9 @@ const MapComponent = () => {
     let graphicsLayerSketch = null;
     let layer = new FeatureLayer({
         url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/cuencas_con_estadistica_y_geometrias_corregidas_area_volumen_calculados/FeatureServer/0"
+    });
+    let projectsLayer = new FeatureLayer({
+        url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/capa_proyectos_consumo_anual/FeatureServer/0"
     });
 
     useEffect(() => {
@@ -75,6 +78,28 @@ const MapComponent = () => {
 
                 queryTributary(results.features[0].attributes.Pfastetter);
 
+                queryProjects(results.features[0].geometry);
+
+            }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    const queryProjects = (geometry) => {
+
+        const projectQuery = {
+            spatialRelationship: "intersects", // Relationship operation to apply
+            geometry: geometry,  // The sketch feature geometry
+            outFields: ["anio", "dga", "consumo_anual_m3"], // Attributes to return
+            returnGeometry: true
+        };
+
+        projectsLayer.queryFeatures(projectQuery)
+            .then((results) => {
+
+                let test = getLastYearInfo(results);
+
+                displayResultProjects(test);
             }).catch((error) => {
             console.log(error);
         });
@@ -126,6 +151,31 @@ const MapComponent = () => {
         mapView.popup.close();
         mapView.graphics.removeAll();
         // Add features to graphics layer
+        mapView.graphics.addMany(results.features);
+    }
+
+    const displayResultProjects = (results) => {
+
+        const simpleMarkerSymbol = {
+            type: "simple-marker",
+            color: [226, 119, 40],  // Orange
+            outline: {
+                color: [255, 255, 255], // White
+                width: 0.5
+            }
+        };
+
+        /*const popupTemplate = {
+            title: "{Nombre_Rio}",
+            content: "Esta cuenta tiene un codigo de: {Pfastetter}"
+        };*/
+
+        results.features.map((feature) => {
+
+            feature.symbol = simpleMarkerSymbol;
+            //feature.popupTemplate = popupTemplate;
+            return feature;
+        });
         mapView.graphics.addMany(results.features);
     }
 

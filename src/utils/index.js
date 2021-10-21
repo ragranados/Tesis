@@ -25,3 +25,32 @@ export const createSqlQuery = (array) => {
 
     return query;
 }
+
+export const getLastYearInfo = (features) => {
+    features.features.sort(function (feature1, feature2) {
+
+        return feature1.attributes.dga - feature2.attributes.dga;
+    })
+
+    var aux = features.features[0];
+    const filteredFeatures = [];
+
+    features.features.forEach((e, index) => {
+
+        if (e.attributes.anio > aux.attributes.anio) {
+            aux = e;
+        }
+
+        if (!features.features[index + 1] || e.attributes.dga != features.features[index + 1].attributes.dga) {
+
+            filteredFeatures.push(aux);
+            aux = features.features[index + 1];
+        }
+
+    }, this);
+
+    features.features = filteredFeatures;
+
+    return features;
+
+}
