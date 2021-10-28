@@ -5,7 +5,8 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import Sketch from "@arcgis/core/widgets/Sketch";
 import './map.css';
-import {createSqlQuery, getLastYearInfo} from "../../utils";
+import {createSqlQuery, getLastYearInfo, tableFormatting} from "../../utils";
+import Table from '../ProjectsTable';
 
 const MapComponent = () => {
     const mapRef = useRef();
@@ -17,6 +18,9 @@ const MapComponent = () => {
     let projectsLayer = new FeatureLayer({
         url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/capa_proyectos_consumo_anual/FeatureServer/0"
     });
+
+    const [projects, setProjectsInfo] = useState([]);
+    const [loadingProjects, setLoadingProjectsInfo] = useState(false);
 
     useEffect(() => {
         const map = new ArcGIGMap({
@@ -44,6 +48,7 @@ const MapComponent = () => {
 
         sketch.on("update", (event) => {
             if (event.state === "start") {
+                clearInfo();
                 makeSpatialQuery(event.graphics[0].geometry);
                 console.log(event.graphics);
             }
@@ -86,6 +91,8 @@ const MapComponent = () => {
     }
 
     const queryProjects = (geometry) => {
+
+        setLoadingProjectsInfo(true);
 
         const projectQuery = {
             spatialRelationship: "intersects", // Relationship operation to apply
@@ -177,13 +184,26 @@ const MapComponent = () => {
             return feature;
         });
         mapView.graphics.addMany(results.features);
+
+        setProjectsInfo(tableFormatting(results.features));
+
+        setLoadingProjectsInfo(false);
+    }
+
+    const clearInfo = () => {
+        mapView.popup.close();
+        mapView.graphics.removeAll();
+
+        setProjectsInfo([]);
     }
 
     return (
-        <div>
+        <div className="container">
             <div className="row">
                 <div className="mapcss" ref={mapRef}/>
             </div>
+
+            <Table projects={projects} loading={loadingProjects}/>
         </div>
     );
 }

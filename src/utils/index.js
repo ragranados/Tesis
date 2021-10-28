@@ -54,3 +54,14 @@ export const getLastYearInfo = (features) => {
     return features;
 
 }
+
+export const tableFormatting = (results) => {
+    console.log('xd');
+
+    return results.map((feature) => {
+        return {
+            ...feature.attributes,
+            consumo_anual_m3: Math.round(feature.attributes.consumo_anual_m3),
+        }
+    });
+}
