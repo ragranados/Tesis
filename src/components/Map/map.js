@@ -21,6 +21,8 @@ const MapComponent = () => {
 
     const [projects, setProjectsInfo] = useState([]);
     const [loadingProjects, setLoadingProjectsInfo] = useState(false);
+    const [cuenca, setCuenca] = useState(null);
+    const [balance, setBalance] = useState(null);
 
     useEffect(() => {
         const map = new ArcGIGMap({
@@ -69,6 +71,10 @@ const MapComponent = () => {
 
     }, [])
 
+    useEffect(() => {
+        calculateBalance();
+    }, [projects]);
+
     const makeSpatialQuery = (geometry) => {
 
         const parcelQuery = {
@@ -80,6 +86,10 @@ const MapComponent = () => {
 
         layer.queryFeatures(parcelQuery)
             .then((results) => {
+
+
+                console.log('cuenca', results.features[0]);
+                setCuenca(results.features[0]);
 
                 queryTributary(results.features[0].attributes.Pfastetter);
 
@@ -190,6 +200,25 @@ const MapComponent = () => {
         setLoadingProjectsInfo(false);
     }
 
+    const calculateBalance = () => {
+        if (projects && cuenca) {
+
+            let consumoProyectos = 0;
+
+            projects.forEach((e) => {
+                consumoProyectos = consumoProyectos + e.consumo_anual_m3;
+            }, this);
+
+            consumoProyectos = Math.round(consumoProyectos);
+
+            setBalance({
+                volumen_cuenca: Math.round(cuenca.attributes.volumen_m3),
+                consumoProyectos,
+                anual: Math.round(cuenca.attributes.volumen_m3 - consumoProyectos)
+            })
+        }
+    }
+
     const clearInfo = () => {
         mapView.popup.close();
         mapView.graphics.removeAll();
@@ -201,6 +230,29 @@ const MapComponent = () => {
         <div className="container">
             <div className="row">
                 <div className="mapcss" ref={mapRef}/>
+
+                {!balance ?
+                    <div className="column">
+                        <text>Volumen Cuenca (m3):</text>
+
+                        <text>Consumo proyectos (m3):</text>
+
+                        <text>Balance Anual (m3):</text>
+                    </div> :
+                    <div className="column">
+                        <text>Volumen Cuenca (m3):</text>
+
+                        <text>{balance.volumen_cuenca}</text>
+
+                        <text>Consumo proyectos (m3):</text>
+
+                        <text>{balance.consumoProyectos}</text>
+
+                        <text>Balance Anual (m3):</text>
+
+                        <text>{balance.anual}</text>
+                    </div>}
+
             </div>
 
             <Table projects={projects} loading={loadingProjects}/>

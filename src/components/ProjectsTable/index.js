@@ -53,7 +53,7 @@ const ProjectsTable = ({loading, projects}) => {
                     next
                     boundaryLinks
                     maxButtons={5}
-                    size="s"
+                    size="md"
                     layout={['total', '-', 'limit', '|', 'pager', 'skip']}
                     total={projects.length}
                     limitOptions={[10, 20]}
