@@ -25,15 +25,15 @@ const ProjectsTable = ({loading, projects}) => {
 
     return (
 
-        <div className="containerTable">
+        <div className="bg-white overflow-hidden shadow-x1 sm:rounded-lg">
             <Table height={400}
-                   className="bg-white overflow-hidden shadow-x1 sm:rounded-lg"
                    data={data}
+                   className="bg-blue-500 text-white"
                    loading={false}
                    autoHeight={true}
                    loading={loading}>
                 {<Table.Column width={150} align="center" fixed>
-                    <Table.HeaderCell>Año</Table.HeaderCell>
+                    <Table.HeaderCell className="bg-blue-500 text-white">Año</Table.HeaderCell>
                     <Table.Cell dataKey="anio"/>
                 </Table.Column>}
 
