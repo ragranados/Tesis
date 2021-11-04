@@ -27,6 +27,7 @@ const ProjectsTable = ({loading, projects}) => {
 
         <div className="containerTable">
             <Table height={400}
+                   className="bg-white overflow-hidden shadow-x1 sm:rounded-lg"
                    data={data}
                    loading={false}
                    autoHeight={true}

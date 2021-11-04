@@ -1,3 +1,23 @@
-.containerTable {
-    width: 75vw;
+
+@layer components {
+    .containerTable {
+        width: 75vw;
+        @apply bg-white overflow-hidden shadow-x1 sm:rounded-lg;
+    }
+
+    .table {
+        @apply table-fixed w-full;
+    }
+
+    .tableRow {
+        @apply bg-blue-500 text-white
+    }
+
+    .tableHeaderTitle {
+        @apply py-4;
+    }
+
+    .tableHeaderData {
+        @apply py-3;
+    }
 }
