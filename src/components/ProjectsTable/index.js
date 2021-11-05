@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 
 import Table from 'rsuite/Table';
-import {Pagination} from "rsuite";
+import {Header, Pagination} from "rsuite";
 
 import './index.css';
 
@@ -15,6 +15,7 @@ const ProjectsTable = ({loading, projects}) => {
     const handleChangeLimit = dataKey => {
         setPage(1);
         setLimit(dataKey);
+
     };
 
     const data = projects.filter((v, i) => {
@@ -23,46 +24,50 @@ const ProjectsTable = ({loading, projects}) => {
         return i >= start && i < end;
     });
 
+
+    const tableHeader = {background:"#3c82f6", color:"white", fontWeight: "900"};
     return (
 
-        <div className="bg-white overflow-hidden shadow-x1 sm:rounded-lg">
-            <Table height={400}
-                   data={data}
-                   className="bg-blue-500 text-white"
-                   loading={false}
-                   autoHeight={true}
-                   loading={loading}>
-                {<Table.Column width={150} align="center" fixed>
-                    <Table.HeaderCell className="bg-blue-500 text-white">Año</Table.HeaderCell>
-                    <Table.Cell dataKey="anio"/>
-                </Table.Column>}
+        <div className="containerTable" >
+            <div className="tableCenter">
+                <Table height={400}
+                       data={data}
+                       loading={false}
+                       autoHeight={true}
+                       loading={loading}>
 
-                <Table.Column width={150}>
-                    <Table.HeaderCell>DGA</Table.HeaderCell>
-                    <Table.Cell dataKey="dga"/>
-                </Table.Column>
+                    {<Table.Column width={150} align="center" fixed>
+                        <Table.HeaderCell style={tableHeader}>Año</Table.HeaderCell>
+                        <Table.Cell dataKey="anio"/>
+                    </Table.Column>}
 
-                <Table.Column width={300} fixed="right">
-                    <Table.HeaderCell>Consumo anual (metros cubicos)</Table.HeaderCell>
-                    <Table.Cell dataKey="consumo_anual_m3"/>
-                </Table.Column>
-            </Table>
+                    <Table.Column width={150}>
+                        <Table.HeaderCell style={tableHeader}>DGA</Table.HeaderCell>
+                        <Table.Cell dataKey="dga"/>
+                    </Table.Column >
 
-            <div style={{padding: 20}}>
-                {data.length === 0 ? null : <Pagination
-                    prev
-                    next
-                    boundaryLinks
-                    maxButtons={5}
-                    size="md"
-                    layout={['total', '-', 'limit', '|', 'pager', 'skip']}
-                    total={projects.length}
-                    limitOptions={[10, 20]}
-                    limit={limit}
-                    activePage={page}
-                    onChangePage={setPage}
-                    onChangeLimit={handleChangeLimit}
-                />}
+                    <Table.Column width={300} fixed="right">
+                        <Table.HeaderCell style={tableHeader}>Consumo anual (metros cubicos)</Table.HeaderCell>
+                        <Table.Cell dataKey="consumo_anual_m3"/>
+                    </Table.Column>
+                </Table>
+
+                <div style={{padding: 12}}>
+                    {data.length === 0 ? null : <Pagination
+                        prev
+                        next
+                        boundaryLinks
+                        maxButtons={5}
+                        size="md"
+                        layout={['total', '-', 'limit', '|', 'pager', 'skip']}
+                        total={projects.length}
+                        limitOptions={[10, 20]}
+                        limit={limit}
+                        activePage={page}
+                        onChangePage={setPage}
+                        onChangeLimit={handleChangeLimit}
+                    />}
+                </div>
             </div>
 
         </div>

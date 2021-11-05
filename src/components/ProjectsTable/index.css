@@ -1,23 +1,27 @@
 
-@layer components {
-    .containerTable {
-        width: 75vw;
-        @apply bg-white overflow-hidden shadow-x1 sm:rounded-lg;
-    }
+.containerTable {
+    padding: 1vw;
+    width: 50vw;
 
-    .table {
-        @apply table-fixed w-full;
-    }
-
-    .tableRow {
-        @apply bg-blue-500 text-white
-    }
-
-    .tableHeaderTitle {
-        @apply py-4;
-    }
-
-    .tableHeaderData {
-        @apply py-3;
-    }
 }
+
+.tableCenter {
+    position:relative;
+    left: 30%;
+
+    /*align-items: center;*/
+    /*justify-content: center;*/
+}
+
+.table {
+    background: white;
+}
+
+.tableHeaderTitle {
+    @apply py-4;
+}
+
+.tableHeaderData {
+    @apply py-3;
+}
+
