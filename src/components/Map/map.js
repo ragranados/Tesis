@@ -254,7 +254,22 @@ const MapComponent = () => {
                     </div>}
 
             </div>
-
+            <div className="tableContainer bg-white overflow-hidden shadow-x1 sm:rounded-lg">
+                <table className="table">
+                    <tr>
+                        <th className="bg-blue-500 text-white">ID</th>
+                        <td>hola</td>
+                    </tr>
+                    <tr>
+                        <th className="bg-blue-500 text-white">ID</th>
+                        <td>hola</td>
+                    </tr>
+                    <tr>
+                        <th className="bg-blue-500 text-white">ID</th>
+                        <td>hola</td>
+                    </tr>
+                </table>
+            </div>
             <Table projects={projects} loading={loadingProjects}/>
         </div>
     );
