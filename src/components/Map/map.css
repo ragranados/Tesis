@@ -10,6 +10,13 @@
     background-color: #FFFFFF;
 }
 
+.rowTable {
+    padding: 0;
+    margin: 0;
+    height: 70vh;
+    width: 65vw;
+}
+
 .row {
     display: flex;
     flex-direction: row;
@@ -19,9 +26,5 @@
     display: flex;
     flex-direction: column;
 }
-.tableContainer{
-    display: flex;
-    flex-direction: row;
 
-}
 

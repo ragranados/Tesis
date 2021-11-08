@@ -228,47 +228,24 @@ const MapComponent = () => {
 
     return (
         <div className="container">
-            <div className="row">
-                <div className="mapcss" ref={mapRef}/>
-
-                {!balance ?
-                    <div className="column">
-                        <text>Volumen Cuenca (m3):</text>
-
-                        <text>Consumo proyectos (m3):</text>
-
-                        <text>Balance Anual (m3):</text>
-                    </div> :
-                    <div className="column">
-                        <text>Volumen Cuenca (m3):</text>
-
-                        <text>{balance.volumen_cuenca}</text>
-
-                        <text>Consumo proyectos (m3):</text>
-
-                        <text>{balance.consumoProyectos}</text>
-
-                        <text>Balance Anual (m3):</text>
-
-                        <text>{balance.anual}</text>
-                    </div>}
-
-            </div>
-            <div className="tableContainer bg-white overflow-hidden shadow-x1 sm:rounded-lg">
-                <table className="table">
-                    <tr>
-                        <th className="bg-blue-500 text-white">ID</th>
-                        <td>hola</td>
-                    </tr>
-                    <tr>
-                        <th className="bg-blue-500 text-white">ID</th>
-                        <td>hola</td>
-                    </tr>
-                    <tr>
-                        <th className="bg-blue-500 text-white">ID</th>
-                        <td>hola</td>
-                    </tr>
-                </table>
+                <div className="row">
+                    <div className="mapcss" ref={mapRef}/>
+                    <div className="bg-white overflow-hidden shadow-x1 sm:rounded-lg">
+                    <table className="table-fixed ">
+                        <tr>
+                            <th className="py-4 h-10 bg-blue-500 text-white">Volumen Cuenca (m3):</th>
+                            <td className="p-3 flex justify-center">{!balance ? "" : balance.volumen_cuenca}</td>
+                        </tr>
+                        <tr>
+                            <th className="py-4 w-28 h-10 bg-blue-500 text-white">Consumo proyectos (m3):</th>
+                            <td className="p-3 flex justify-center">{!balance ? "" : balance.consumoProyectos}</td>
+                        </tr>
+                        <tr>
+                            <th className="py-4 h-10 bg-blue-500 text-white">Balance Anual (m3):</th>
+                            <td className="p-3 flex justify-center">{!balance ? "" : balance.anual}</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <Table projects={projects} loading={loadingProjects}/>
         </div>
