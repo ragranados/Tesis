@@ -18,8 +18,8 @@ function Navbar() {
                 <FaIcons.FaBars onClick={showSidebar} />
                 
             </Link>
-            <div className="bg-blue-500 h-20 m-auto flex justify-center p-5">
-                <div className="text-white text-xl">Banner y logo de Marn</div>
+            <div className=" m-auto flex justify-center p-1">
+                <img src="/assets/img/marn.png" className="object-contain m-auto h-20" alt="" />
             </div>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
