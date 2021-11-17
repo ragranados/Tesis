@@ -1,11 +1,10 @@
+import './index.css';
+import 'rsuite/dist/rsuite.min.css';
+
+import {Header, Pagination} from "rsuite";
 import React, {useEffect} from "react";
 
 import Table from 'rsuite/Table';
-import {Header, Pagination} from "rsuite";
-
-import './index.css';
-
-import 'rsuite/dist/rsuite.min.css';
 
 const ProjectsTable = ({loading, projects}) => {
 
@@ -28,8 +27,8 @@ const ProjectsTable = ({loading, projects}) => {
     const tableHeader = {background:"#3c82f6", color:"white", fontWeight: "900"};
     return (
 
-        <div className="containerTable" >
-            <div className="tableCenter">
+        <div className="containerTable mx-auto" >
+            <div>
                 <Table height={400}
                        data={data}
                        loading={false}

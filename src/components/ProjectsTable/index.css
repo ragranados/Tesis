@@ -1,16 +1,10 @@
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 .containerTable {
     padding: 1vw;
     width: 50vw;
 
-}
-
-.tableCenter {
-    position:relative;
-    left: 30%;
-
-    /*align-items: center;*/
-    /*justify-content: center;*/
 }
 
 .table {

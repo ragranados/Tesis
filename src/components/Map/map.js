@@ -1,11 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
-import ArcGIGMap from "@arcgis/core/Map";
-import MapView from '@arcgis/core/views/MapView';
-import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
-import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
-import Sketch from "@arcgis/core/widgets/Sketch";
 import './map.css';
+
+import React, {useEffect, useRef, useState} from 'react';
 import {createSqlQuery, getLastYearInfo, tableFormatting} from "../../utils";
+
+import ArcGIGMap from "@arcgis/core/Map";
+import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
+import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
+import MapView from '@arcgis/core/views/MapView';
+import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from '../ProjectsTable';
 
 const MapComponent = () => {
@@ -227,8 +229,11 @@ const MapComponent = () => {
     }
 
     return (
-        <div className="container">
-                <div className="row">
+        <div className="container mx-auto">
+            
+            
+                <div className="row justify-center">
+                    
                     <div className="mapcss" ref={mapRef}/>
                     <div className="bg-white overflow-hidden shadow-x1 sm:rounded-lg">
                     <table className="table-fixed ">
@@ -248,6 +253,7 @@ const MapComponent = () => {
                 </div>
             </div>
             <Table projects={projects} loading={loadingProjects}/>
+            
         </div>
     );
 }
