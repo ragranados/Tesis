@@ -24,7 +24,7 @@ const ProjectsTable = ({loading, projects}) => {
     });
 
 
-    const tableHeader = {background:"#3c82f6", color:"white", fontWeight: "900"};
+    const tableHeader = {background:"#303845", color:"white", fontWeight: "900"};
     return (
 
         <div className="containerTable mx-auto" >
