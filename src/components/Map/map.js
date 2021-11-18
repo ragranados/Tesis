@@ -225,9 +225,9 @@ const MapComponent = ({setNotification}) => {
             consumoProyectos = Math.round(consumoProyectos);
 
             setBalance({
-                volumen_cuenca: Math.round(cuenca.attributes.volumen_m3),
-                consumoProyectos,
-                anual: Math.round(cuenca.attributes.volumen_m3 - consumoProyectos)
+                volumen_cuenca: Intl.NumberFormat().format(Math.round(cuenca.attributes.volumen_m3)),
+                consumoProyectos: Intl.NumberFormat().format(consumoProyectos),
+                anual: Intl.NumberFormat().format(Math.round(cuenca.attributes.volumen_m3 - consumoProyectos))
             })
         }
     }
@@ -245,19 +245,19 @@ const MapComponent = ({setNotification}) => {
             <div className="row justify-center">
 
                 <div className="mapcss" ref={mapRef}/>
-                <div className="bg-white overflow-hidden shadow-x1 sm:rounded-lg">
-                    <table className="table-fixed ">
-                        <tr>
-                            <th className="py-4 h-10 bg-bgmarn text-textmarn">Volumen Cuenca:</th>
-                            <td className="p-3 flex justify-center">{!balance ? "" : `${balance.volumen_cuenca} m3`}</td>
+                <div className="m-auto ml-5 bg-white overflow-hidden shadow-x1 sm:rounded-lg">
+                    <table className="bg-bgmarn table-fixed">
+                        <tr className="border border-textmarn">
+                            <th className="py-4 bg-bgmarn text-textmarn">Volumen Cuenca:</th>
+                            <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.volumen_cuenca} m3`}</td>
                         </tr>
-                        <tr>
-                            <th className="py-4 w-28 h-10 bg-bgmarn text-textmarn">Consumo proyectos:</th>
-                            <td className="p-3 flex justify-center">{!balance ? "" : `${balance.consumoProyectos} m3`}</td>
+                        <tr className="border border-textmarn" >
+                            <th className="py-4 bg-bgmarn text-textmarn">Consumo proyectos:</th>
+                            <td className="p-5 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.consumoProyectos} m3`}</td>
                         </tr>
-                        <tr>
-                            <th className="py-4 h-10 bg-bgmarn text-textmarn">Balance Anual:</th>
-                            <td className="p-3 flex justify-center">{!balance ? "" : `${balance.anual} m3`}</td>
+                        <tr className="border border-textmarn">
+                            <th className="py-4 bg-bgmarn text-textmarn">Balance Anual:</th>
+                            <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.anual} m3`}</td>
                         </tr>
                     </table>
                 </div>

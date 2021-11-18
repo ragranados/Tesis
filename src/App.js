@@ -17,7 +17,8 @@ esriConfig.apiKey = process.env.REACT_APP_ARCGIS_API_KEY;
 
 const Notificacion = ({mensaje, type, header, onClose}) => {
     return (
-        <Notification closable={true} style={{position: "fixed", zIndex: 100}} header={header} type={type}
+        <Notification closable={true} style={{position: "fixed", zIndex: 100, left: 28, top: 110}} header={header}
+                      type={type}
                       onClose={onClose}>
             <text>{mensaje}</text>
         </Notification>
