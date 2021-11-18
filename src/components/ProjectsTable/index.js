@@ -32,6 +32,7 @@ const ProjectsTable = ({loading, projects}) => {
                 <Table height={400}
                        data={data}
                        loading={false}
+                       className="sm:rounded-lg"
                        autoHeight={true}
                        loading={loading}>
 
