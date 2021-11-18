@@ -12,13 +12,7 @@ import Table from '../ProjectsTable';
 import ReactDOM from 'react-dom'
 import {Notification, toaster} from 'rsuite';
 
-const message = (
-    <Notification>
-        <text>hola</text>
-    </Notification>
-);
-
-const MapComponent = () => {
+const MapComponent = ({setNotification}) => {
     const mapRef = useRef();
     let mapView = null;
     let graphicsLayerSketch = null;
@@ -66,7 +60,11 @@ const MapComponent = () => {
                     makeSpatialQuery(event.graphics[0].geometry);
                     console.log(event.graphics);
                 } else {
-
+                    setNotification({
+                        mensaje: "Por el momento, solo se pueden dibujar geometrias de tipo punto.",
+                        type: "warning",
+                        header: "Advertencia"
+                    });
                 }
             }
 

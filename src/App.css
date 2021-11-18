@@ -9,6 +9,8 @@
 
 .notification {
   position: fixed;
+  left: 10px;
+  top: 10px
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -1,11 +1,11 @@
 import './App.css';
 
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import React, {useEffect, useRef, useState} from 'react';
 
 import Map from './components/Map/map';
 import Navbar from './components/Navbar/Navbar'
 import Products from './pages/Products'
-import React from 'react';
 import Reports from './pages/Reports'
 import esriConfig from "@arcgis/core/config.js";
 import {Notification} from "rsuite";
@@ -15,21 +15,36 @@ import {Notification} from "rsuite";
 esriConfig.assetsPath = "./assets";
 esriConfig.apiKey = process.env.REACT_APP_ARCGIS_API_KEY;
 
+const Notificacion = ({mensaje, type, header, onClose}) => {
+    return (
+        <Notification closable={true} style={{position: "fixed", zIndex: 100}} header={header} type={type}
+                      onClose={onClose}>
+            <text>{mensaje}</text>
+        </Notification>
+    )
+}
+
 function App() {
 
-    //const use
+    const setNotificacion = ({mensaje, type, header}) => {
+        setInfoNotificacion({mensaje, type, header});
+
+        setVisible(true);
+    }
+
+    const [visible, setVisible] = useState(false);
+    const [infoNotificacion, setInfoNotificacion] = useState("");
 
     return (
         <>
             <Router>
                 <Navbar/>
 
-                <Notification style={{position:"fixed", zIndex:100}} header={"Advertencia"} type={"warning"}>
-                    <text>hola</text>
-                </Notification>
+                {!visible ? null : <Notificacion mensaje={infoNotificacion.mensaje} type={infoNotificacion.type}
+                                                 header={infoNotificacion.header} onClose={() => setVisible(false)}/>}
 
                 <Routes>
-                    <Route path='/' exact element={<Map/>}/>
+                    <Route path='/' exact element={<Map setNotification={setNotificacion}/>}/>
                     <Route path='/reports' exact element={<Reports/>}/>
                     <Route path='/products' exact element={<Products/>}/>
                 </Routes>
