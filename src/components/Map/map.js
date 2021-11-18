@@ -56,6 +56,7 @@ const MapComponent = ({setNotification}) => {
             if (event.state === "start") {
                 if (event.graphics[0].geometry.type == "point") {
                     clearInfo();
+                    setLoadingProjectsInfo(true);
                     console.log('Geometria', event.graphics[0].geometry.type);
                     makeSpatialQuery(event.graphics[0].geometry);
                     console.log(event.graphics);
@@ -115,7 +116,7 @@ const MapComponent = ({setNotification}) => {
 
     const queryProjects = (geometry) => {
 
-        setLoadingProjectsInfo(true);
+        //setLoadingProjectsInfo(true);
 
         const projectQuery = {
             spatialRelationship: "intersects", // Relationship operation to apply
@@ -244,14 +245,33 @@ const MapComponent = ({setNotification}) => {
 
             <div className="row justify-center">
 
-                <div className="mapcss" ref={mapRef}/>
+                <div className="mapcss" ref={mapRef}>
+                    {!loadingProjects ? null :
+                        <div style={{
+                            height: "100vh",
+                            width: "100vw",
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            opacity: 0.8,
+                            background: "white",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+
+                            <text style={{fontWeight: 60, fontSize: 50, zIndex: 100}}>Cargando...</text>
+
+                        </div>}
+                </div>
+
                 <div className="m-auto ml-5 bg-white overflow-hidden shadow-x1 sm:rounded-lg">
                     <table className="bg-bgmarn table-fixed">
                         <tr className="border border-textmarn">
                             <th className="py-4 bg-bgmarn text-textmarn">Volumen Cuenca:</th>
                             <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.volumen_cuenca} m3`}</td>
                         </tr>
-                        <tr className="border border-textmarn" >
+                        <tr className="border border-textmarn">
                             <th className="py-4 bg-bgmarn text-textmarn">Consumo proyectos:</th>
                             <td className="p-5 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.consumoProyectos} m3`}</td>
                         </tr>
