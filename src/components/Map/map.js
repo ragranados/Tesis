@@ -260,8 +260,9 @@ const MapComponent = ({setNotification}) => {
                             alignItems: "center"
                         }}>
 
-                            <text style={{fontWeight: 60, fontSize: 50, zIndex: 100}}>Cargando...</text>
-
+                                <div
+                                    className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"
+                                ></div>
                         </div>}
                 </div>
 
