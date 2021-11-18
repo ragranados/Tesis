@@ -9,6 +9,14 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import MapView from '@arcgis/core/views/MapView';
 import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from '../ProjectsTable';
+import ReactDOM from 'react-dom'
+import {Notification, toaster} from 'rsuite';
+
+const message = (
+    <Notification>
+        <text>hola</text>
+    </Notification>
+);
 
 const MapComponent = () => {
     const mapRef = useRef();
@@ -52,9 +60,14 @@ const MapComponent = () => {
 
         sketch.on("update", (event) => {
             if (event.state === "start") {
-                clearInfo();
-                makeSpatialQuery(event.graphics[0].geometry);
-                console.log(event.graphics);
+                if (event.graphics[0].geometry.type == "point") {
+                    clearInfo();
+                    console.log('Geometria', event.graphics[0].geometry.type);
+                    makeSpatialQuery(event.graphics[0].geometry);
+                    console.log(event.graphics);
+                } else {
+
+                }
             }
 
             if (event.state === "complete") {
@@ -230,30 +243,29 @@ const MapComponent = () => {
 
     return (
         <div className="container mx-auto">
-            
-            
-                <div className="row justify-center">
-                    
-                    <div className="mapcss" ref={mapRef}/>
-                    <div className="bg-white overflow-hidden shadow-x1 sm:rounded-lg">
+
+            <div className="row justify-center">
+
+                <div className="mapcss" ref={mapRef}/>
+                <div className="bg-white overflow-hidden shadow-x1 sm:rounded-lg">
                     <table className="table-fixed ">
                         <tr>
-                            <th className="py-4 h-10 bg-bgmarn text-textmarn">Volumen Cuenca (m3):</th>
-                            <td className="p-3 flex justify-center">{!balance ? "" : balance.volumen_cuenca}</td>
+                            <th className="py-4 h-10 bg-bgmarn text-textmarn">Volumen Cuenca:</th>
+                            <td className="p-3 flex justify-center">{!balance ? "" : `${balance.volumen_cuenca} m3`}</td>
                         </tr>
                         <tr>
-                            <th className="py-4 w-28 h-10 bg-bgmarn text-textmarn">Consumo proyectos (m3):</th>
-                            <td className="p-3 flex justify-center">{!balance ? "" : balance.consumoProyectos}</td>
+                            <th className="py-4 w-28 h-10 bg-bgmarn text-textmarn">Consumo proyectos:</th>
+                            <td className="p-3 flex justify-center">{!balance ? "" : `${balance.consumoProyectos} m3`}</td>
                         </tr>
                         <tr>
-                            <th className="py-4 h-10 bg-bgmarn text-textmarn">Balance Anual (m3):</th>
-                            <td className="p-3 flex justify-center">{!balance ? "" : balance.anual}</td>
+                            <th className="py-4 h-10 bg-bgmarn text-textmarn">Balance Anual:</th>
+                            <td className="p-3 flex justify-center">{!balance ? "" : `${balance.anual} m3`}</td>
                         </tr>
                     </table>
                 </div>
             </div>
             <Table projects={projects} loading={loadingProjects}/>
-            
+
         </div>
     );
 }
