@@ -16,7 +16,7 @@ function Navbar() {
         <div className="navbar">
             <Link to="#" className="menu-bars">
                 <FaIcons.FaBars onClick={showSidebar} />
-                
+
             </Link>
             <div className=" m-auto flex justify-center p-1">
                 <img src="/assets/img/marn.png" className="object-contain m-auto h-20" alt="" />
@@ -42,7 +42,7 @@ function Navbar() {
                 })}
             </ul>
         </nav>
-            
+
         </>
     )
 }
