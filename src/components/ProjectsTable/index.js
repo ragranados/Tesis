@@ -5,6 +5,7 @@ import {Header, Pagination} from "rsuite";
 import React, {useEffect} from "react";
 
 import Table from 'rsuite/Table';
+import {ExportCSV} from "../ExportCSV/ExportCSV";
 
 const ProjectsTable = ({loading, projects}) => {
 
@@ -49,6 +50,12 @@ const ProjectsTable = ({loading, projects}) => {
                     <Table.Column width={300} fixed="right">
                         <Table.HeaderCell style={tableHeader}>Consumo anual (metros cubicos)</Table.HeaderCell>
                         <Table.Cell dataKey="consumo_anual_m3"/>
+                    </Table.Column>
+                    <Table.Column>
+                        <Table.HeaderCell style={tableHeader} >
+                            <ExportCSV csvData={projects} fileName={"archivo"} />
+                        </Table.HeaderCell>
+                        <Table.Cell/>
                     </Table.Column>
                 </Table>
 

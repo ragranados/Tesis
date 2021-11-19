@@ -284,7 +284,6 @@ const MapComponent = ({setNotification}) => {
                 </div>
             </div>
             <Table projects={projects} loading={loadingProjects}/>
-
         </div>
     );
 }
