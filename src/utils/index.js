@@ -15,13 +15,30 @@ function getRootCode(pfastetter) {
 
 export const createSqlQuery = (array) => {
 
-    let rootCode = getRootCode(array);
+    let query = "", rootCode = getRootCode(array[0]);
+
+    if (isEven(array[0][array.length - 1])) {
+        query += `Pfastetter = '${array[0]}'`;
+    } else {
+        query += `(Pfastetter >= '${array[0]}' AND Pfastetter LIKE '${rootCode}%') OR Pfastetter LIKE '${rootCode}0%'`;
+    }
+
+    for (let i = 1; i < array.length; i++) {
+        rootCode = getRootCode(array[i])
+        if (isEven(array[0][array.length - 1])) {
+            query += ` or Pfastetter = '${array[i]}'`;
+        } else {
+            query += ` or (Pfastetter >= '${array[i]}' AND Pfastetter LIKE '${rootCode}%') OR Pfastetter LIKE '${rootCode}0%'`;
+        }
+    }
+
+    /*let rootCode = getRootCode(array);
 
     if (isEven(array[array.length - 1])) {
         return `Pfastetter = '${array}'`
     }
 
-    let query = `(Pfastetter >= '${array}' AND Pfastetter LIKE '${rootCode}%') OR Pfastetter LIKE '${rootCode}0%'`;
+    let query = `(Pfastetter >= '${array}' AND Pfastetter LIKE '${rootCode}%') OR Pfastetter LIKE '${rootCode}0%'`;*/
 
     return query;
 }
@@ -56,7 +73,6 @@ export const getLastYearInfo = (features) => {
 }
 
 export const tableFormatting = (results) => {
-    console.log('xd');
 
     return results.map((feature) => {
         return {

@@ -9,8 +9,6 @@ import GraphicLayer from '@arcgis/core/layers/GraphicsLayer';
 import MapView from '@arcgis/core/views/MapView';
 import Sketch from "@arcgis/core/widgets/Sketch";
 import Table from '../ProjectsTable';
-import ReactDOM from 'react-dom'
-import {Notification, toaster} from 'rsuite';
 
 const MapComponent = ({setNotification}) => {
     const mapRef = useRef();
@@ -25,7 +23,7 @@ const MapComponent = ({setNotification}) => {
 
     const [projects, setProjectsInfo] = useState([]);
     const [loadingProjects, setLoadingProjectsInfo] = useState(false);
-    const [cuenca, setCuenca] = useState(null);
+    const [cuencas, setCuencas] = useState([]);
     const [balance, setBalance] = useState(null);
 
     useEffect(() => {
@@ -54,19 +52,22 @@ const MapComponent = ({setNotification}) => {
 
         sketch.on("update", (event) => {
             if (event.state === "start") {
-                if (event.graphics[0].geometry.type == "point") {
-                    clearInfo();
-                    setLoadingProjectsInfo(true);
-                    console.log('Geometria', event.graphics[0].geometry.type);
+
+                clearInfo();
+                setLoadingProjectsInfo(true);
+
+                makeSpatialQuery(event.graphics[0].geometry);
+
+                /*if (event.graphics[0].geometry.type == "point") {
+
                     makeSpatialQuery(event.graphics[0].geometry);
-                    console.log(event.graphics);
                 } else {
                     setNotification({
                         mensaje: "Por el momento, solo se pueden dibujar geometrias de tipo punto.",
                         type: "warning",
                         header: "Advertencia"
                     });
-                }
+                }*/
             }
 
             if (event.state === "complete") {
@@ -86,7 +87,7 @@ const MapComponent = ({setNotification}) => {
     }, [])
 
     useEffect(() => {
-        calculateBalance();
+        //calculateBalance();
     }, [projects]);
 
     const makeSpatialQuery = (geometry) => {
@@ -100,12 +101,16 @@ const MapComponent = ({setNotification}) => {
 
         layer.queryFeatures(parcelQuery)
             .then((results) => {
+                setCuencas(results.features);
 
+                let array = [];
 
-                console.log('cuenca', results.features[0]);
-                setCuenca(results.features[0]);
+                for (let i = 0; i < results.features.length; i++) {
 
-                queryTributary(results.features[0].attributes.Pfastetter);
+                    array.push(results.features[i].attributes.Pfastetter);
+                }
+
+                queryTributary(array);
 
                 queryProjects(results.features[0].geometry);
 
@@ -140,8 +145,8 @@ const MapComponent = ({setNotification}) => {
 
         const parcelQuery = {
             where: createSqlQuery(results),  // Set by select element
-            spatialRelationship: "intersects", // Relationship operation to apply
-            geometry: mapView.extent, // Restricted to visible extent of the map
+            //spatialRelationship: "intersects", // Relationship operation to apply
+            //geometry: mapView.extent, // Restricted to visible extent of the map
             outFields: ["OBJECTID", "Pfastetter", "volumen_m3"], // Attributes to return
             returnGeometry: true
         };
@@ -172,17 +177,18 @@ const MapComponent = ({setNotification}) => {
             content: "Esta cuenta tiene un codigo de: {Pfastetter}"
         };
 
-        results.features.map((feature) => {
+        var hola = results.features.map((feature) => {
+
             feature.symbol = symbol;
             feature.popupTemplate = popupTemplate;
             return feature;
         });
 
         // Clear display
-        mapView.popup.close();
-        mapView.graphics.removeAll();
+        //mapView.popup.close();
+        //mapView.graphics.removeAll();
         // Add features to graphics layer
-        mapView.graphics.addMany(results.features);
+        mapView.graphics.addMany(hola);
     }
 
     const displayResultProjects = (results) => {
@@ -215,7 +221,7 @@ const MapComponent = ({setNotification}) => {
     }
 
     const calculateBalance = () => {
-        if (projects && cuenca) {
+        if (projects && cuencas) {
 
             let consumoProyectos = 0;
 
@@ -226,9 +232,9 @@ const MapComponent = ({setNotification}) => {
             consumoProyectos = Math.round(consumoProyectos);
 
             setBalance({
-                volumen_cuenca: Intl.NumberFormat().format(Math.round(cuenca.attributes.volumen_m3)),
+                volumen_cuenca: Intl.NumberFormat().format(Math.round(cuencas.attributes.volumen_m3)),
                 consumoProyectos: Intl.NumberFormat().format(consumoProyectos),
-                anual: Intl.NumberFormat().format(Math.round(cuenca.attributes.volumen_m3 - consumoProyectos))
+                anual: Intl.NumberFormat().format(Math.round(cuencas.attributes.volumen_m3 - consumoProyectos))
             })
         }
     }
@@ -260,9 +266,9 @@ const MapComponent = ({setNotification}) => {
                             alignItems: "center"
                         }}>
 
-                                <div
-                                    className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"
-                                ></div>
+                            <div
+                                className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"
+                            ></div>
                         </div>}
                 </div>
 
