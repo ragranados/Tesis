@@ -35,7 +35,6 @@ const MapComponent = ({setNotification}) => {
             container: mapRef.current,
             map: map,
             center: [-88.79499397277833, 13.7153719325982],
-            //center: [-118.80500, 34.0270  0],
             zoom: 9
         });
 
@@ -57,17 +56,6 @@ const MapComponent = ({setNotification}) => {
                 setLoadingProjectsInfo(true);
 
                 makeSpatialQuery(event.graphics[0].geometry);
-
-                /*if (event.graphics[0].geometry.type == "point") {
-
-                    makeSpatialQuery(event.graphics[0].geometry);
-                } else {
-                    setNotification({
-                        mensaje: "Por el momento, solo se pueden dibujar geometrias de tipo punto.",
-                        type: "warning",
-                        header: "Advertencia"
-                    });
-                }*/
             }
 
             if (event.state === "complete") {
@@ -87,7 +75,7 @@ const MapComponent = ({setNotification}) => {
     }, [])
 
     useEffect(() => {
-        //calculateBalance();
+        calculateBalance();
     }, [projects]);
 
     const makeSpatialQuery = (geometry) => {
@@ -112,41 +100,37 @@ const MapComponent = ({setNotification}) => {
 
                 queryTributary(array);
 
-                queryProjects(results.features[0].geometry);
+                queryProjects(results.features);
 
             }).catch((error) => {
             console.log(error);
         });
     }
 
-    const queryProjects = (geometry) => {
+    const queryProjects = async (geometry) => {
 
-        //setLoadingProjectsInfo(true);
+        let projectsLocal = [];
 
-        const projectQuery = {
-            spatialRelationship: "intersects", // Relationship operation to apply
-            geometry: geometry,  // The sketch feature geometry
-            outFields: ["anio", "dga", "consumo_anual_m3"], // Attributes to return
-            returnGeometry: true
-        };
+        for (let i = 0; i < geometry.length; i++) {
+            let projectQuery = {
+                spatialRelationship: "intersects", // Relationship operation to apply
+                geometry: geometry[i].geometry,  // The sketch feature geometry
+                outFields: ["anio", "dga", "consumo_anual_m3"], // Attributes to return
+                returnGeometry: true
+            };
 
-        projectsLayer.queryFeatures(projectQuery)
-            .then((results) => {
+            let results = await projectsLayer.queryFeatures(projectQuery);
 
-                let test = getLastYearInfo(results);
+            projectsLocal = projectsLocal.concat(getLastYearInfo(results).features);
+        }
 
-                displayResultProjects(test);
-            }).catch((error) => {
-            console.log(error);
-        });
+        displayResultProjects({features: projectsLocal});
     }
 
     const queryTributary = (results) => {
 
         const parcelQuery = {
             where: createSqlQuery(results),  // Set by select element
-            //spatialRelationship: "intersects", // Relationship operation to apply
-            //geometry: mapView.extent, // Restricted to visible extent of the map
             outFields: ["OBJECTID", "Pfastetter", "volumen_m3"], // Attributes to return
             returnGeometry: true
         };
@@ -177,18 +161,14 @@ const MapComponent = ({setNotification}) => {
             content: "Esta cuenta tiene un codigo de: {Pfastetter}"
         };
 
-        var hola = results.features.map((feature) => {
+        var resultado = results.features.map((feature) => {
 
             feature.symbol = symbol;
             feature.popupTemplate = popupTemplate;
             return feature;
         });
 
-        // Clear display
-        //mapView.popup.close();
-        //mapView.graphics.removeAll();
-        // Add features to graphics layer
-        mapView.graphics.addMany(hola);
+        mapView.graphics.addMany(resultado);
     }
 
     const displayResultProjects = (results) => {
@@ -202,15 +182,9 @@ const MapComponent = ({setNotification}) => {
             }
         };
 
-        /*const popupTemplate = {
-            title: "{Nombre_Rio}",
-            content: "Esta cuenta tiene un codigo de: {Pfastetter}"
-        };*/
-
         results.features.map((feature) => {
 
             feature.symbol = simpleMarkerSymbol;
-            //feature.popupTemplate = popupTemplate;
             return feature;
         });
         mapView.graphics.addMany(results.features);
@@ -221,9 +195,15 @@ const MapComponent = ({setNotification}) => {
     }
 
     const calculateBalance = () => {
-        if (projects && cuencas) {
 
-            let consumoProyectos = 0;
+        if (projects && cuencas.length > 0) {
+
+            let consumoProyectos = 0, volumen_cuencas = 0;
+
+            cuencas.forEach((e) => {
+
+                volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
+            }, this)
 
             projects.forEach((e) => {
                 consumoProyectos = consumoProyectos + e.consumo_anual_m3;
@@ -232,9 +212,9 @@ const MapComponent = ({setNotification}) => {
             consumoProyectos = Math.round(consumoProyectos);
 
             setBalance({
-                volumen_cuenca: Intl.NumberFormat().format(Math.round(cuencas.attributes.volumen_m3)),
+                volumen_cuenca: Intl.NumberFormat().format(Math.round(volumen_cuencas)),
                 consumoProyectos: Intl.NumberFormat().format(consumoProyectos),
-                anual: Intl.NumberFormat().format(Math.round(cuencas.attributes.volumen_m3 - consumoProyectos))
+                anual: Intl.NumberFormat().format(Math.round(volumen_cuencas - consumoProyectos))
             })
         }
     }
