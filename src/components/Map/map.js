@@ -1,7 +1,7 @@
 import './map.css';
 
 import React, {useEffect, useRef, useState, use} from 'react';
-import {createSqlQuery, getLastYearInfo, tableFormatting} from "../../utils";
+import {createSqlQuery, getLastYearInfo, getMostVolumeInfo, tableFormatting} from "../../utils";
 import {Dropdown} from "rsuite";
 
 import ArcGIGMap from "@arcgis/core/Map";
@@ -140,7 +140,7 @@ const MapComponent = ({setNotification}) => {
                 projectsLocal = projectsLocal.concat(getLastYearInfo(results).features);
 
             } else {
-                console.log("pendiente");
+                projectsLocal = projectsLocal.concat(getMostVolumeInfo(results).features);
             }
         }
 

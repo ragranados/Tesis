@@ -59,6 +59,36 @@ export const getLastYearInfo = (features) => {
         }
 
         if (!features.features[index + 1] || e.attributes.dga != features.features[index + 1].attributes.dga) {
+            console.log(e.attributes);
+
+            filteredFeatures.push(aux);
+            aux = features.features[index + 1];
+        }
+
+    }, this);
+
+    features.features = filteredFeatures;
+
+    return features;
+
+}
+
+export const getMostVolumeInfo = (features) => {
+    features.features.sort(function (feature1, feature2) {
+
+        return feature1.attributes.dga - feature2.attributes.dga;
+    })
+
+    var aux = features.features[0];
+    const filteredFeatures = [];
+
+    features.features.forEach((e, index) => {
+
+        if (e.attributes.consumo_anual_m3 > aux.attributes.consumo_anual_m3) {
+            aux = e;
+        }
+
+        if (!features.features[index + 1] || e.attributes.dga != features.features[index + 1].attributes.dga) {
 
             filteredFeatures.push(aux);
             aux = features.features[index + 1];
