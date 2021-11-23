@@ -1,6 +1,6 @@
 import './map.css';
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState, use} from 'react';
 import {createSqlQuery, getLastYearInfo, tableFormatting} from "../../utils";
 import {Dropdown} from "rsuite";
 
@@ -13,7 +13,10 @@ import Table from '../ProjectsTable';
 
 const MapComponent = ({setNotification}) => {
     const mapRef = useRef();
-    let mapView = null;
+    const map = new ArcGIGMap({
+        basemap: 'gray-vector'
+    })
+
     let graphicsLayerSketch = null;
     let layer = new FeatureLayer({
         url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/cuencas_con_estadistica_y_geometrias_corregidas_area_volumen_calculados/FeatureServer/0"
@@ -26,37 +29,39 @@ const MapComponent = ({setNotification}) => {
     const [loadingProjects, setLoadingProjectsInfo] = useState(false);
     const [cuencas, setCuencas] = useState([]);
     const [balance, setBalance] = useState(null);
+    const [queryGraphic, setQueryGraphic] = useState(null);
+    const [mapView, setMapView] = useState(null);
+    const [filtro, setFiltro] = useState("anio");
 
     useEffect(() => {
-        const map = new ArcGIGMap({
-            basemap: 'gray-vector'
-        })
 
-        mapView = new MapView({
+        let mapViewLocal = new MapView({
             container: mapRef.current,
             map: map,
             center: [-88.79499397277833, 13.7153719325982],
             zoom: 9
         });
 
+        setMapView(mapViewLocal)
+
         graphicsLayerSketch = new GraphicLayer();
         map.add(graphicsLayerSketch);
 
         const sketch = new Sketch({
             layer: graphicsLayerSketch,
-            view: mapView,
+            view: mapViewLocal,
             creationMode: "update" // Auto-select
         });
 
-        mapView.ui.add(sketch, "top-right");
+        mapViewLocal.ui.add(sketch, "top-right");
 
         sketch.on("update", (event) => {
             if (event.state === "start") {
-
-                clearInfo();
                 setLoadingProjectsInfo(true);
 
-                makeSpatialQuery(event.graphics[0].geometry);
+                setQueryGraphic(event.graphics[0].geometry);
+
+                //makeSpatialQuery(event.graphics[0].geometry);
             }
 
             if (event.state === "complete") {
@@ -68,16 +73,23 @@ const MapComponent = ({setNotification}) => {
             }
         })
 
-        mapView.on("click", e => {
+        mapViewLocal.on("click", e => {
 
         })
-        return () => mapView && mapView.destroy();
+        //return () => mapView && mapView.destroy();
 
     }, [])
 
     useEffect(() => {
         calculateBalance();
     }, [projects]);
+
+    useEffect(() => {
+        if (queryGraphic) {
+            clearInfo();
+            makeSpatialQuery(queryGraphic);
+        }
+    }, [queryGraphic])
 
     const makeSpatialQuery = (geometry) => {
 
@@ -122,7 +134,14 @@ const MapComponent = ({setNotification}) => {
 
             let results = await projectsLayer.queryFeatures(projectQuery);
 
-            projectsLocal = projectsLocal.concat(getLastYearInfo(results).features);
+            console.log(filtro);
+            if (filtro === "anio") {
+
+                projectsLocal = projectsLocal.concat(getLastYearInfo(results).features);
+
+            } else {
+                console.log("pendiente");
+            }
         }
 
         displayResultProjects({features: projectsLocal});
@@ -188,6 +207,7 @@ const MapComponent = ({setNotification}) => {
             feature.symbol = simpleMarkerSymbol;
             return feature;
         });
+
         mapView.graphics.addMany(results.features);
 
         setProjectsInfo(tableFormatting(results.features));
@@ -274,7 +294,9 @@ const MapComponent = ({setNotification}) => {
                 <Table projects={projects} loading={loadingProjects}/>
 
                 <div>
-                    <Dropdown title={"Filtrar por..."}>
+                    <Dropdown title={"Filtrar por..."} onSelect={(eventKey, event) => {
+                        setFiltro(eventKey)
+                    }}>
                         <Dropdown.Item eventKey={"anio"}>Filtrar por año mas reciente</Dropdown.Item>
                         <Dropdown.Item eventKey={"consumo"}>Filtrar por mayor consumo</Dropdown.Item>
                     </Dropdown>
