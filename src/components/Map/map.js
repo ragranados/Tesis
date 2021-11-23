@@ -31,7 +31,7 @@ const MapComponent = ({setNotification}) => {
     const [balance, setBalance] = useState(null);
     const [queryGraphic, setQueryGraphic] = useState(null);
     const [mapView, setMapView] = useState(null);
-    const [filtro, setFiltro] = useState("anio");
+    const [filtro, setFiltro] = useState("año");
 
     useEffect(() => {
 
@@ -135,7 +135,7 @@ const MapComponent = ({setNotification}) => {
             let results = await projectsLayer.queryFeatures(projectQuery);
 
             console.log(filtro);
-            if (filtro === "anio") {
+            if (filtro === "año") {
 
                 projectsLocal = projectsLocal.concat(getLastYearInfo(results).features);
 
@@ -235,7 +235,7 @@ const MapComponent = ({setNotification}) => {
             setBalance({
                 volumen_cuenca: Intl.NumberFormat().format(Math.round(volumen_cuencas)),
                 consumoProyectos: Intl.NumberFormat().format(consumoProyectos),
-                anual: Intl.NumberFormat().format(Math.round(volumen_cuencas - consumoProyectos))
+                anual: Intl.NumberFormat().format(consumoProyectos / volumen_cuencas)
             })
         }
     }
@@ -294,10 +294,10 @@ const MapComponent = ({setNotification}) => {
                 <Table projects={projects} loading={loadingProjects}/>
 
                 <div>
-                    <Dropdown title={"Filtrar por..."} onSelect={(eventKey, event) => {
+                    <Dropdown title={`Filtrar por: ${filtro}`} onSelect={(eventKey, event) => {
                         setFiltro(eventKey)
                     }}>
-                        <Dropdown.Item eventKey={"anio"}>Filtrar por año mas reciente</Dropdown.Item>
+                        <Dropdown.Item eventKey={"año"}>Filtrar por año mas reciente</Dropdown.Item>
                         <Dropdown.Item eventKey={"consumo"}>Filtrar por mayor consumo</Dropdown.Item>
                     </Dropdown>
                 </div>
