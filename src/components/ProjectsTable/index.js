@@ -42,12 +42,12 @@ const ProjectsTable = ({loading, projects}) => {
                         <Table.Cell dataKey="anio"/>
                     </Table.Column>}
 
-                    <Table.Column width={150}>
+                    <Table.Column width={140}>
                         <Table.HeaderCell style={tableHeader}>DGA</Table.HeaderCell>
                         <Table.Cell dataKey="dga"/>
                     </Table.Column >
 
-                    <Table.Column width={300} fixed="right">
+                    <Table.Column width={240} fixed="right">
                         <Table.HeaderCell style={tableHeader}>Consumo anual (metros cubicos)</Table.HeaderCell>
                         <Table.Cell dataKey="consumo_anual_m3"/>
                     </Table.Column>

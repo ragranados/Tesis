@@ -2,6 +2,7 @@ import './map.css';
 
 import React, {useEffect, useRef, useState} from 'react';
 import {createSqlQuery, getLastYearInfo, tableFormatting} from "../../utils";
+import {Dropdown} from "rsuite";
 
 import ArcGIGMap from "@arcgis/core/Map";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
@@ -269,7 +270,16 @@ const MapComponent = ({setNotification}) => {
                     </table>
                 </div>
             </div>
-            <Table projects={projects} loading={loadingProjects}/>
+            <div className={"row tableContainer"}>
+                <Table projects={projects} loading={loadingProjects}/>
+
+                <div>
+                    <Dropdown title={"Filtrar por..."}>
+                        <Dropdown.Item eventKey={"anio"}>Filtrar por año mas reciente</Dropdown.Item>
+                        <Dropdown.Item eventKey={"consumo"}>Filtrar por mayor consumo</Dropdown.Item>
+                    </Dropdown>
+                </div>
+            </div>
         </div>
     );
 }

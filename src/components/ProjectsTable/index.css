@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 .containerTable {
-    padding: 1vw;
     width: 50vw;
 
+}
+
+.containerTable {
+    width: 35vw;
 }
 
 .table {

@@ -6,6 +6,11 @@
     margin-top: 30px;
 }
 
+.tableContainer {
+    width: 70vw;
+    margin-top: 1vh;
+}
+
 .mapcss {
     padding: 0;
     margin: 0;
