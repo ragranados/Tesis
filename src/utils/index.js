@@ -59,7 +59,6 @@ export const getLastYearInfo = (features) => {
         }
 
         if (!features.features[index + 1] || e.attributes.dga != features.features[index + 1].attributes.dga) {
-            console.log(e.attributes);
 
             filteredFeatures.push(aux);
             aux = features.features[index + 1];

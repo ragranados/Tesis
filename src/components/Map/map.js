@@ -2,7 +2,8 @@ import './map.css';
 
 import React, {useEffect, useRef, useState} from 'react';
 import {createSqlQuery, getLastYearInfo, getMostVolumeInfo, tableFormatting} from "../../utils";
-import {Dropdown} from "rsuite";
+import {createPointGL} from "./mapUtils";
+import {Dropdown, Input, Button} from "rsuite";
 
 import ArcGIGMap from "@arcgis/core/Map";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
@@ -32,6 +33,7 @@ const MapComponent = ({setNotification}) => {
     const [queryGraphic, setQueryGraphic] = useState(null);
     const [mapView, setMapView] = useState(null);
     const [filtro, setFiltro] = useState("año");
+    const [point, setPoint] = useState({long: 0, lat: 0})
 
     useEffect(() => {
 
@@ -90,6 +92,13 @@ const MapComponent = ({setNotification}) => {
             makeSpatialQuery(queryGraphic);
         }
     }, [queryGraphic])
+
+    const createPointAndQuery = () => {
+        clearInfo();
+        setLoadingProjectsInfo(true);
+        let newPoint = createPointGL(point.long, point.lat);
+        makeSpatialQuery(newPoint.geometry);
+    }
 
     const makeSpatialQuery = (geometry) => {
 
@@ -291,7 +300,29 @@ const MapComponent = ({setNotification}) => {
                         </table>
                     </div>
 
-                    
+                    <div>
+                        <Input onChange={(string, event) => {
+                            let newState = point;
+
+                            newState.lat = string;
+
+                            setPoint(newState);
+                        }} className={"m-5"} placeholder={"Ingrese Latitud..."}/>
+
+                        <Input onChange={(string, event) => {
+                            let newState = point;
+
+                            point.long = string;
+
+                            setPoint(newState);
+                        }} className={"m-5"} placeholder={"Ingrese Longitud..."}/>
+
+                        <Button onClick={() => {
+                            createPointAndQuery();
+                        }} className={"m-5 bg-bgmarn text-textmarn"}>Buscar</Button>
+                    </div>
+
+
                 </div>
             </div>
             <div className={"row tableContainer"}>
