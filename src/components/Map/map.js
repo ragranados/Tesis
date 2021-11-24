@@ -1,6 +1,6 @@
 import './map.css';
 
-import React, {useEffect, useRef, useState, use} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {createSqlQuery, getLastYearInfo, getMostVolumeInfo, tableFormatting} from "../../utils";
 import {Dropdown} from "rsuite";
 
@@ -273,21 +273,25 @@ const MapComponent = ({setNotification}) => {
                         </div>}
                 </div>
 
-                <div className="m-auto ml-5 bg-white overflow-hidden shadow-x1 sm:rounded-lg">
-                    <table className="bg-bgmarn table-fixed">
-                        <tr className="border border-textmarn">
-                            <th className="py-4 bg-bgmarn text-textmarn">Volumen Cuenca:</th>
-                            <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.volumen_cuenca} m3`}</td>
-                        </tr>
-                        <tr className="border border-textmarn">
-                            <th className="py-4 bg-bgmarn text-textmarn">Consumo proyectos:</th>
-                            <td className="p-5 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.consumoProyectos} m3`}</td>
-                        </tr>
-                        <tr className="border border-textmarn">
-                            <th className="py-4 bg-bgmarn text-textmarn">Balance Anual:</th>
-                            <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.anual} m3`}</td>
-                        </tr>
-                    </table>
+                <div>
+                    <div className="m-auto ml-5 bg-white overflow-hidden shadow-x1 sm:rounded-lg">
+                        <table className="bg-bgmarn table-fixed">
+                            <tr className="border border-textmarn">
+                                <th className="py-4 bg-bgmarn text-textmarn">Volumen Cuenca:</th>
+                                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.volumen_cuenca} m3`}</td>
+                            </tr>
+                            <tr className="border border-textmarn">
+                                <th className="py-4 bg-bgmarn text-textmarn">Consumo proyectos:</th>
+                                <td className="p-5 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.consumoProyectos} m3`}</td>
+                            </tr>
+                            <tr className="border border-textmarn">
+                                <th className="py-4 bg-bgmarn text-textmarn">Balance Anual:</th>
+                                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.anual} m3`}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    
                 </div>
             </div>
             <div className={"row tableContainer"}>
