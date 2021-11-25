@@ -28,9 +28,11 @@ const ProjectsTable = ({loading, projects}) => {
     const tableHeader = {background:"#303845", color:"white", fontWeight: "900"};
     return (
 
-        <div className="containerTable mx-auto" >
+        <div className="containerTable" >
             <div>
-                <Table height={400}
+                <Table
+                    width={530}
+                    height={400}
                        data={data}
                        loading={false}
                        className="sm:rounded-lg"
@@ -51,12 +53,12 @@ const ProjectsTable = ({loading, projects}) => {
                         <Table.HeaderCell style={tableHeader}>Consumo anual (metros cubicos)</Table.HeaderCell>
                         <Table.Cell dataKey="consumo_anual_m3"/>
                     </Table.Column>
-                    <Table.Column>
+                    {/* <Table.Column>
                         <Table.HeaderCell style={tableHeader} >
                             <ExportCSV csvData={projects} fileName={"archivo"} />
                         </Table.HeaderCell>
                         <Table.Cell/>
-                    </Table.Column>
+                    </Table.Column>*/}
                 </Table>
 
                 <div style={{padding: 12}}>

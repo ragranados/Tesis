@@ -2,16 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 .containerTable {
-    width: 50vw;
 
 }
 
 .containerTable {
-    width: 35vw;
 }
 
 .table {
-    background: white;
+    background-color: #00A0FF;
 }
 
 .tableHeaderTitle {

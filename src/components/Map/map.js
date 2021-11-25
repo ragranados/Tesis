@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {createSqlQuery, getLastYearInfo, getMostVolumeInfo, tableFormatting} from "../../utils";
 import {createPointGL} from "./mapUtils";
 import {Dropdown, Input, Button} from "rsuite";
+import {ExportCSV} from "../ExportCSV/ExportCSV";
 
 import ArcGIGMap from "@arcgis/core/Map";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
@@ -322,11 +323,14 @@ const MapComponent = ({setNotification}) => {
                         }} className={"m-5 bg-bgmarn text-textmarn"}>Buscar</Button>
                     </div>
 
-
                 </div>
             </div>
             <div className={"row tableContainer"}>
                 <Table projects={projects} loading={loadingProjects}/>
+
+                <div>
+                    <ExportCSV csvData={projects} fileName={"archivo"} />
+                </div>
 
                 <div>
                     <Dropdown title={`Filtrar por: ${filtro}`} onSelect={(eventKey, event) => {
