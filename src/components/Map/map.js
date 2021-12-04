@@ -365,7 +365,7 @@ const MapComponent = ({setNotification}) => {
                 <Table projects={projects} loading={loadingProjects}/>
 
                 <div>
-                    <ExportCSV csvData={projects} fileName={"archivo"}/>
+                    <ExportCSV csvData={projects} fileName={"archivo"} setNotification={setNotification}/>
                 </div>
 
                 <div>
