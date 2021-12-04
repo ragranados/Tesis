@@ -95,10 +95,46 @@ const MapComponent = ({setNotification}) => {
     }, [queryGraphic])
 
     const createPointAndQuery = () => {
-        clearInfo();
-        setLoadingProjectsInfo(true);
-        let newPoint = createPointGL(point.long, point.lat);
-        makeSpatialQuery(newPoint.geometry);
+        console.log(`lat: ${point.lat}, long: ${point.long}`);
+
+        let makeQuery = true, reason = "";
+
+        let lat = point.lat;
+        let long = point.long;
+
+        if (!((lat > -90 && lat < 90) && (long > -180 && long < 180))) {
+            makeQuery = false;
+
+            reason = "Coordenadas fuera de rango.";
+        }
+
+        if (lat == 0 || long == 0) {
+            makeQuery = false;
+            reason = "Campo de coordenadas vacío."
+        }
+
+        if (makeQuery) {
+            clearInfo();
+
+            mapView.center = [point.long, point.lat]
+            mapView.zoom = 10
+
+            setLoadingProjectsInfo(true);
+
+            let newPoint = createPointGL(point.long, point.lat);
+
+            makeSpatialQuery(newPoint.geometry);
+
+        } else {
+            setNotification(
+                {
+                    mensaje: reason,
+                    type: "warning",
+                    header: "Advertencia",
+                    onClose: null
+                }
+            )
+        }
     }
 
     const makeSpatialQuery = (geometry) => {
@@ -302,7 +338,7 @@ const MapComponent = ({setNotification}) => {
                     </div>
 
                     <div>
-                        <Input onChange={(string, event) => {
+                        <Input type="number" onChange={(string, event) => {
                             let newState = point;
 
                             newState.lat = string;
@@ -310,7 +346,7 @@ const MapComponent = ({setNotification}) => {
                             setPoint(newState);
                         }} className={"m-5"} placeholder={"Ingrese Latitud..."}/>
 
-                        <Input onChange={(string, event) => {
+                        <Input type="number" onChange={(string, event) => {
                             let newState = point;
 
                             point.long = string;
@@ -329,7 +365,7 @@ const MapComponent = ({setNotification}) => {
                 <Table projects={projects} loading={loadingProjects}/>
 
                 <div>
-                    <ExportCSV csvData={projects} fileName={"archivo"} />
+                    <ExportCSV csvData={projects} fileName={"archivo"}/>
                 </div>
 
                 <div>
