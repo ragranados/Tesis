@@ -21,10 +21,10 @@ const MapComponent = ({setNotification}) => {
 
     let graphicsLayerSketch = null;
     let layer = new FeatureLayer({
-        url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/cuencas_con_estadistica_y_geometrias_corregidas_area_volumen_calculados/FeatureServer/0"
+        url: process.env.REACT_APP_CUENCAS
     });
     let projectsLayer = new FeatureLayer({
-        url: "https://services3.arcgis.com/mivYpjRW1Gcq9sPC/arcgis/rest/services/capa_proyectos_consumo_anual/FeatureServer/0"
+        url: process.env.REACT_APP_PROYECTOS
     });
 
     const [projects, setProjectsInfo] = useState([]);
