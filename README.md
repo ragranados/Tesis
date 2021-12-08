@@ -10,8 +10,8 @@ Este proyecto fue hecho para el MARN (Ministerio de Medio Ambiente y Recursos Na
   -  Microsoft Edge
   -  Opera
   
-  ## Variables de entorno:    
-  En la carpeta raiz se tiene un archivo .env.example, se borra el .example para que quede operativo, luego llenar las variables de entorno con las siguientes especificaciones:    
-  - REACT_APP_PROYECTOS (Obligatoria): En esta variable se coloca la URL completa que apunta hacia la capa donde se encuentra la información de los proyectos.
-  - REACT_APP_CUENCAS (Obligatoria): En esta variable se coloca la URL completa que apunta hacia la capa donde se encuentra la información de las cuencas.
-  - REACT_APP_ARCGIS_API_KEY (Opcional): En esta variable se coloca la KEY para la licencia de ARCGIS.
+## Variables de entorno:    
+En la carpeta raiz se tiene un archivo .env.example, se borra el .example para que quede operativo, luego llenar las variables de entorno con las siguientes especificaciones:    
+- REACT_APP_PROYECTOS (Obligatoria): En esta variable se coloca la URL completa que apunta hacia la capa donde se encuentra la información de los proyectos.
+- REACT_APP_CUENCAS (Obligatoria): En esta variable se coloca la URL completa que apunta hacia la capa donde se encuentra la información de las cuencas.
+- REACT_APP_ARCGIS_API_KEY (Opcional): En esta variable se coloca la KEY para la licencia de ARCGIS.
