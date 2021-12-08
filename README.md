@@ -15,3 +15,15 @@ En la carpeta raiz se tiene un archivo .env.example, se borra el .example para q
 - REACT_APP_PROYECTOS (Obligatoria): En esta variable se coloca la URL completa que apunta hacia la capa donde se encuentra la información de los proyectos.
 - REACT_APP_CUENCAS (Obligatoria): En esta variable se coloca la URL completa que apunta hacia la capa donde se encuentra la información de las cuencas.
 - REACT_APP_ARCGIS_API_KEY (Opcional): En esta variable se coloca la KEY para la licencia de ARCGIS.
+- PORT (opcional): En esta variable de coloca el puerto en el que se podra consultar la aplicacion.
+
+## Instacion en producción:
+En este apartado de detallan los pasos para realizar la build de producción:
+- Descomprimir el archivo ZIP.
+- Realizar la instalación de las dependencias con el comando npm install
+- Ejecutar el comando npm run build, este comando nos va a generar un folder llamado build.
+- Si no se tiene instalada la dependencia global serve, instalarla con el comando npm install -g serve
+- Luego, la misma carpeta donde se encuentre la carpeta build, ejecutar en la terminal serve -s build
+
+## Aclaraciones:
+Si se cambia alguna variable de entorno, se debe volver a crear la build y volver a correr serve -s build
