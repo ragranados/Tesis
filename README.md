@@ -1,4 +1,4 @@
-# Propuesta de herramienta geoespacial para la determinación de los impactos acumulados hacia los recursos hídricos subterráneo  
+# Propuesta de herramienta geoespacial para la determinación de los impactos acumulados hacia los recursos hídricos subterráneos  
 
 ## Acerca del proyecto  
 Este proyecto fue hecho para el MARN (Ministerio de Medio Ambiente y Recursos Naturales), para poder visualizar el impacto que tienen las industrias y proyectos que hacen uso de los recursos hídricos subterráneos y para poder evaluar cómo afecta la inclusión de un nuevo proyecto que requiera el uso de estos recursos hídricos.
