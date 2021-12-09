@@ -148,7 +148,7 @@ const MapComponent = ({setNotification}) => {
 
         layer.queryFeatures(parcelQuery)
             .then((results) => {
-                setCuencas(results.features);
+                //setCuencas(results.features);
 
                 let array = [];
 
@@ -159,7 +159,7 @@ const MapComponent = ({setNotification}) => {
 
                 queryTributary(array);
 
-                queryProjects(results.features);
+                //queryProjects(results.features);
 
             }).catch((error) => {
             console.log(error);
@@ -204,7 +204,11 @@ const MapComponent = ({setNotification}) => {
         layer.queryFeatures(parcelQuery)
             .then((resultsTributary) => {
 
+                setCuencas(resultsTributary.features);
+
                 displayResult(resultsTributary);
+
+                queryProjects(resultsTributary.features)
 
             }).catch((error) => {
             console.log(error);
