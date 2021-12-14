@@ -30,6 +30,7 @@ const MapComponent = ({setNotification}) => {
     const [projects, setProjectsInfo] = useState([]);
     const [loadingProjects, setLoadingProjectsInfo] = useState(false);
     const [cuencas, setCuencas] = useState([]);
+    const [contadorCuencas, setContadorCuencas] = useState(0);
     const [balance, setBalance] = useState(null);
     const [queryGraphic, setQueryGraphic] = useState(null);
     const [mapView, setMapView] = useState(null);
@@ -150,16 +151,29 @@ const MapComponent = ({setNotification}) => {
             .then((results) => {
                 //setCuencas(results.features);
 
-                let array = [];
+                if(results.features.length > 0){
+                    let array = [];
 
-                for (let i = 0; i < results.features.length; i++) {
+                    for (let i = 0; i < results.features.length; i++) {
 
-                    array.push(results.features[i].attributes.Pfastetter);
+                        array.push(results.features[i].attributes.Pfastetter);
+                    }
+
+                    queryTributary(array);
+
+                    //queryProjects(results.features);
+                }else{
+                    setLoadingProjectsInfo(false)
+
+                    setNotification(
+                        {
+                            mensaje: "No hay registro de cuencas en esta zona.",
+                            type: "warning",
+                            header: "Advertencia",
+                            onClose: null
+                        }
+                    )
                 }
-
-                queryTributary(array);
-
-                //queryProjects(results.features);
 
             }).catch((error) => {
             console.log(error);
@@ -180,7 +194,8 @@ const MapComponent = ({setNotification}) => {
 
             let results = await projectsLayer.queryFeatures(projectQuery);
 
-            console.log(filtro);
+            console.log(filtro, contadorCuencas);
+            setContadorCuencas(i + 1);
             if (filtro === "año") {
 
                 projectsLocal = projectsLocal.concat(getLastYearInfo(results).features);
@@ -189,6 +204,8 @@ const MapComponent = ({setNotification}) => {
                 projectsLocal = projectsLocal.concat(getMostVolumeInfo(results).features);
             }
         }
+
+        setContadorCuencas(0);
 
         displayResultProjects({features: projectsLocal});
     }
@@ -272,7 +289,7 @@ const MapComponent = ({setNotification}) => {
             let consumoProyectos = 0, volumen_cuencas = 0;
 
             cuencas.forEach((e) => {
-
+                console.log(volumen_cuencas , parseInt(e.attributes.volumen_m3));
                 volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
             }, this)
 
@@ -317,9 +334,15 @@ const MapComponent = ({setNotification}) => {
                             alignItems: "center"
                         }}>
 
-                            <div
-                                className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"
-                            ></div>
+                           <div className="column textAlign" >
+                               <div
+                                   className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"
+                               ></div>
+
+                               <div >
+                                   {`Buscando en ${contadorCuencas}/${cuencas.length}`}
+                               </div>
+                           </div>
                         </div>}
                 </div>
 
