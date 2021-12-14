@@ -194,7 +194,7 @@ const MapComponent = ({setNotification}) => {
 
             let results = await projectsLayer.queryFeatures(projectQuery);
 
-            console.log(filtro, contadorCuencas);
+            //console.log(filtro, contadorCuencas);
             setContadorCuencas(i + 1);
             if (filtro === "año") {
 
@@ -204,8 +204,6 @@ const MapComponent = ({setNotification}) => {
                 projectsLocal = projectsLocal.concat(getMostVolumeInfo(results).features);
             }
         }
-
-        setContadorCuencas(0);
 
         displayResultProjects({features: projectsLocal});
     }
@@ -280,17 +278,24 @@ const MapComponent = ({setNotification}) => {
         setProjectsInfo(tableFormatting(results.features));
 
         setLoadingProjectsInfo(false);
+        
+        setContadorCuencas(0);
     }
 
     const calculateBalance = () => {
 
         if (projects && cuencas.length > 0) {
 
-            let consumoProyectos = 0, volumen_cuencas = 0;
+            let consumoProyectos = 0, volumen_cuencas = 0, volumenLocal = 0;
 
             cuencas.forEach((e) => {
-                console.log(volumen_cuencas , parseInt(e.attributes.volumen_m3));
-                volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
+
+                console.log(e.attributes.volumen_m3);
+
+                if(e.attributes.volumen_m3){
+                    console.log('XDDD',e.attributes.volumen_m3);
+                    volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
+                }
             }, this)
 
             projects.forEach((e) => {
