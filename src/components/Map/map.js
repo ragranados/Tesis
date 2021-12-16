@@ -151,7 +151,7 @@ const MapComponent = ({setNotification}) => {
             .then((results) => {
                 //setCuencas(results.features);
 
-                if(results.features.length > 0){
+                if (results.features.length > 0) {
                     let array = [];
 
                     for (let i = 0; i < results.features.length; i++) {
@@ -162,7 +162,7 @@ const MapComponent = ({setNotification}) => {
                     queryTributary(array);
 
                     //queryProjects(results.features);
-                }else{
+                } else {
                     setLoadingProjectsInfo(false)
 
                     setNotification(
@@ -278,7 +278,7 @@ const MapComponent = ({setNotification}) => {
         setProjectsInfo(tableFormatting(results.features));
 
         setLoadingProjectsInfo(false);
-        
+
         setContadorCuencas(0);
     }
 
@@ -286,14 +286,11 @@ const MapComponent = ({setNotification}) => {
 
         if (projects && cuencas.length > 0) {
 
-            let consumoProyectos = 0, volumen_cuencas = 0, volumenLocal = 0;
+            let consumoProyectos = 0, volumen_cuencas = 0, indice = 0, estado = "";
 
             cuencas.forEach((e) => {
 
-                console.log(e.attributes.volumen_m3);
-
-                if(e.attributes.volumen_m3){
-                    console.log('XDDD',e.attributes.volumen_m3);
+                if (e.attributes.volumen_m3) {
                     volumen_cuencas = volumen_cuencas + parseInt(e.attributes.volumen_m3);
                 }
             }, this)
@@ -304,10 +301,21 @@ const MapComponent = ({setNotification}) => {
 
             consumoProyectos = Math.round(consumoProyectos);
 
+            indice = Intl.NumberFormat().format(consumoProyectos / volumen_cuencas)
+
+            if (indice < 0.8) {
+                estado = "Buen estado cuantitavo"
+            } else if (indice >= 0.8 && indice < 1) {
+                estado = "En proceso de sobre explotación"
+            } else if (indice > 1) {
+                estado = "Sobre explotado"
+            }
+
             setBalance({
                 volumen_cuenca: Intl.NumberFormat().format(Math.round(volumen_cuencas)),
                 consumoProyectos: Intl.NumberFormat().format(consumoProyectos),
-                anual: Intl.NumberFormat().format(consumoProyectos / volumen_cuencas)
+                anual: Intl.NumberFormat().format(consumoProyectos / volumen_cuencas),
+                estado
             })
         }
     }
@@ -339,15 +347,15 @@ const MapComponent = ({setNotification}) => {
                             alignItems: "center"
                         }}>
 
-                           <div className="column textAlign" >
-                               <div
-                                   className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"
-                               ></div>
+                            <div className="column textAlign">
+                                <div
+                                    className="animate-spin rounded-full h-20 w-20 border-b-2 border-gray-900"
+                                ></div>
 
-                               <div >
-                                   {`Buscando en ${contadorCuencas}/${cuencas.length}`}
-                               </div>
-                           </div>
+                                <div>
+                                    {`Buscando en ${contadorCuencas}/${cuencas.length}`}
+                                </div>
+                            </div>
                         </div>}
                 </div>
 
@@ -355,7 +363,7 @@ const MapComponent = ({setNotification}) => {
                     <div className="m-auto ml-5 bg-white overflow-hidden shadow-x1 sm:rounded-lg">
                         <table className="bg-bgmarn table-fixed">
                             <tr className="border border-textmarn">
-                                <th className="py-4 bg-bgmarn text-textmarn">Volumen Cuenca:</th>
+                                <th className="py-4 bg-bgmarn text-textmarn">Entrada por recarga hídrica potencial:</th>
                                 <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.volumen_cuenca} m3`}</td>
                             </tr>
                             <tr className="border border-textmarn">
@@ -363,8 +371,12 @@ const MapComponent = ({setNotification}) => {
                                 <td className="p-5 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.consumoProyectos} m3`}</td>
                             </tr>
                             <tr className="border border-textmarn">
-                                <th className="py-4 bg-bgmarn text-textmarn">Balance Anual:</th>
-                                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.anual} m3`}</td>
+                                <th className="py-4 bg-bgmarn text-textmarn">Índice de explotación:</th>
+                                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.anual}`}</td>
+                            </tr>
+                            <tr className="border border-textmarn">
+                                <th className="py-4 bg-bgmarn text-textmarn">Estado:</th>
+                                <td className="p-3 flex justify-center bg-bgmarn text-textmarn">{!balance ? null : `${balance.estado}`}</td>
                             </tr>
                         </table>
                     </div>
