@@ -44,58 +44,58 @@ export const createSqlQuery = (array) => {
 }
 
 export const getLastYearInfo = (features) => {
-    features.features.sort(function (feature1, feature2) {
+    features.sort(function (feature1, feature2) {
 
         return feature1.attributes.dga - feature2.attributes.dga;
     })
 
-    var aux = features.features[0];
+    var aux = features[0];
     const filteredFeatures = [];
 
-    features.features.forEach((e, index) => {
+    features.forEach((e, index) => {
 
         if (e.attributes.anio > aux.attributes.anio) {
             aux = e;
         }
 
-        if (!features.features[index + 1] || e.attributes.dga != features.features[index + 1].attributes.dga) {
+        if (!features[index + 1] || e.attributes.dga != features[index + 1].attributes.dga) {
 
             filteredFeatures.push(aux);
-            aux = features.features[index + 1];
+            aux = features[index + 1];
         }
 
     }, this);
 
-    features.features = filteredFeatures;
+    features = filteredFeatures;
 
     return features;
 
 }
 
 export const getMostVolumeInfo = (features) => {
-    features.features.sort(function (feature1, feature2) {
+    features.sort(function (feature1, feature2) {
 
         return feature1.attributes.dga - feature2.attributes.dga;
     })
 
-    var aux = features.features[0];
+    var aux = features[0];
     const filteredFeatures = [];
 
-    features.features.forEach((e, index) => {
+    features.forEach((e, index) => {
 
         if (e.attributes.consumo_anual_m3 > aux.attributes.consumo_anual_m3) {
             aux = e;
         }
 
-        if (!features.features[index + 1] || e.attributes.dga != features.features[index + 1].attributes.dga) {
+        if (!features[index + 1] || e.attributes.dga != features[index + 1].attributes.dga) {
 
             filteredFeatures.push(aux);
-            aux = features.features[index + 1];
+            aux = features[index + 1];
         }
 
     }, this);
 
-    features.features = filteredFeatures;
+    features = filteredFeatures;
 
     return features;
 

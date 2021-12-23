@@ -27,6 +27,7 @@ const MapComponent = ({setNotification}) => {
         url: process.env.REACT_APP_PROYECTOS
     });
 
+    const [allProjects, setAllProjectsInfo] = useState([]);
     const [projects, setProjectsInfo] = useState([]);
     const [loadingProjects, setLoadingProjectsInfo] = useState(false);
     const [cuencas, setCuencas] = useState([]);
@@ -182,6 +183,7 @@ const MapComponent = ({setNotification}) => {
 
     const queryProjects = async (geometry) => {
 
+        let allProjectsLocal = [];
         let projectsLocal = [];
 
         for (let i = 0; i < geometry.length; i++) {
@@ -195,15 +197,20 @@ const MapComponent = ({setNotification}) => {
             let results = await projectsLayer.queryFeatures(projectQuery);
 
             //console.log(filtro, contadorCuencas);
+            allProjectsLocal = allProjectsLocal.concat(results.features)
             setContadorCuencas(i + 1);
             if (filtro === "año") {
 
-                projectsLocal = projectsLocal.concat(getLastYearInfo(results).features);
+                projectsLocal = projectsLocal.concat(getLastYearInfo(results.features));
 
             } else {
-                projectsLocal = projectsLocal.concat(getMostVolumeInfo(results).features);
+                projectsLocal = projectsLocal.concat(getMostVolumeInfo(results.features));
             }
         }
+
+        console.log(allProjectsLocal);
+
+        setAllProjectsInfo(allProjectsLocal);
 
         displayResultProjects({features: projectsLocal});
     }
@@ -280,6 +287,23 @@ const MapComponent = ({setNotification}) => {
         setLoadingProjectsInfo(false);
 
         setContadorCuencas(0);
+    }
+
+    const updateProjectsInfo = (filtroLocal) => {
+
+        let projectsLocal = []
+
+        if (filtroLocal === "año") {
+
+            projectsLocal = projectsLocal.concat(getLastYearInfo(allProjects));
+
+        } else {
+            projectsLocal = projectsLocal.concat(getMostVolumeInfo(allProjects));
+        }
+
+        setProjectsInfo(tableFormatting(projectsLocal));
+
+        calculateBalance()
     }
 
     const calculateBalance = () => {
@@ -415,6 +439,7 @@ const MapComponent = ({setNotification}) => {
                 <div>
                     <Dropdown title={`Filtrar por: ${filtro}`} onSelect={(eventKey, event) => {
                         setFiltro(eventKey)
+                        updateProjectsInfo(eventKey)
                     }}>
                         <Dropdown.Item eventKey={"año"}>Filtrar por año mas reciente</Dropdown.Item>
                         <Dropdown.Item eventKey={"consumo"}>Filtrar por mayor consumo</Dropdown.Item>
